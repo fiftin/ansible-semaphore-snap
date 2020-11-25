@@ -1,0 +1,22 @@
+name: semaphore
+base: core18
+version: 2.6.2
+summary: Modern UI for Ansible
+description: |
+  Ansible Semaphore is beautiful web interface for running Ansible playbooks.
+  If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
+
+grade: devel
+confinement: devmode
+
+apps:
+  semaphore:
+    command: semaphore
+    daemon: simple
+
+parts:
+  service:
+    plugin: dump
+    source: https://github.com/ansible-semaphore/semaphore/releases/download/v2.6.2/semaphore_2.6.2_linux_amd64.deb
+    source-type: deb
+
