@@ -11,7 +11,7 @@ confinement: devmode
 
 apps:
   semaphored:
-    command: semaphored
+    command: ./semaphored.sh
     daemon: simple
     plugs:
       - network-bind
@@ -30,6 +30,5 @@ parts:
 
   semaphored:
     plugin: dump
-    source: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
-    source-type: deb
+    source: ./semaphored.sh
 
