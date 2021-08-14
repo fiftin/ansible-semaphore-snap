@@ -11,7 +11,7 @@ confinement: devmode
 
 apps:
   semaphored:
-    command: ./semaphored.sh
+    command: semaphored
     daemon: simple
     plugs:
       - network-bind
@@ -29,6 +29,9 @@ parts:
     source-type: deb
 
   semaphored:
-    plugin: dump
-    source: ./semaphored.sh
-
+    plugin: nil
+    source: ./bin
+    source-type: local
+    override-build: |
+      chmod +x semaphored
+      cp semaphored $SNAPCRAFT_PART_INSTALL/semaphored
