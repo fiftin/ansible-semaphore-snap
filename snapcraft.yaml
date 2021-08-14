@@ -8,7 +8,9 @@ description: |
 
 grade: devel
 confinement: devmode
-
+architectures:
+  - amd64
+  - arm64
 apps:
   semaphored:
     command: semaphored
@@ -25,7 +27,9 @@ apps:
 parts:
   semaphore:
     plugin: dump
-    source: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
+    source:
+      - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
+      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_arm64.deb
     source-type: deb
 
   semaphored:
