@@ -1,19 +1,19 @@
 #!/bin/bash
 
-cookie_hash=$(snapctl get semaphore cookie_hash)
+cookie_hash=$(snapctl get cookie-hash)
 
 if [ -z "$cookie_hash" ]
 then
   cookie_hash=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 40 ; echo '')
-  snapctl set semaphore cookie_hash "$cookie_hash"
+  snapctl set cookie-hash="$cookie_hash"
 fi
 
-cookie_encryption=$(snapctl get semaphore cookie_encryption)
+cookie_encryption=$(snapctl get cookie-encryption)
 
 if [ -z "$cookie_encryption" ]
 then
   cookie_encryption=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 40 ; echo '')
-  snapctl set semaphore cookie_encryption "$cookie_encryption"
+  snapctl set cookie-encryption="$cookie_encryption"
 fi
 
 tee "$SNAP_USER_COMMON/config.json" <<CONFIG

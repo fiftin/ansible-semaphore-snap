@@ -11,6 +11,7 @@ confinement: devmode
 architectures:
   - amd64
   - arm64
+
 apps:
   semaphored:
     command: semaphored
