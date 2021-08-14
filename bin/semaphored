@@ -1,6 +1,32 @@
 #!/bin/bash
 
+
+port=$(snapctl get port)
+interface=$(snapctl get interface)
+tmp_path="/tmp/semaphore",
 cookie_hash=$(snapctl get cookie-hash)
+cookie_encryption=$(snapctl get cookie-encryption)
+email_sender=$(snapctl get email-sender)
+email_host=$(snapctl get email-host)
+email_port=$(snapctl get email-port)
+web_host=$(snapctl get web-host)
+ldap_binddn=$(snapctl get ldap-binddn)
+ldap_bindpassword=$(snapctl get ldap-bindpassword)
+ldap_server=$(snapctl get ldap-server)
+ldap_searchdn=$(snapctl get ldap-searchdn)
+ldap_searchfilter=$(snapctl get ldap-searchfilter)
+
+ldap_mappings_dn=$(snapctl get ldap-mappings.dn)
+ldap_mappings_mail=$(snapctl get ldap-mappings.mail)
+ldap_mappings_uid=$(snapctl get ldap-mappings.uid)
+ldap_mappings_cn=$(snapctl get ldap-mappings.cn)
+
+telegram_chat=$(snapctl get telegram-chat)
+telegram_token=$(snapctl get telegram-token)
+concurrency_mode=$(snapctl get concurrency-mode)
+max_parallel_tasks=$(snapctl get max-parallel-tasks)
+port=$(snapctl get port)
+
 
 if [ -z "$cookie_hash" ]
 then
@@ -8,12 +34,40 @@ then
   snapctl set cookie-hash="$cookie_hash"
 fi
 
-cookie_encryption=$(snapctl get cookie-encryption)
-
 if [ -z "$cookie_encryption" ]
 then
   cookie_encryption=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 40 ; echo '')
   snapctl set cookie-encryption="$cookie_encryption"
+fi
+
+if [ -z "$max_parallel_tasks" ]
+then
+  max_parallel_tasks=0
+  snapctl set max-parallel-tasks="$max_parallel_tasks"
+fi
+
+if [ -z "$email_alert" ]
+then
+  email_alert=false
+  snapctl set email-alert="$email_alert"
+fi
+
+if [ -z "$telegram_alert" ]
+then
+  telegram_alert=false
+  snapctl set telegram-alert="$telegram_alert"
+fi
+
+if [ -z "$ldap_enable" ]
+then
+  ldap_enable=false
+  snapctl set ldap-enable="$ldap_enable"
+fi
+
+if [ -z "$ldap_needtls" ]
+then
+  ldap_needtls=false
+  snapctl set ldap-needtls="$ldap_needtls"
 fi
 
 tee "$SNAP_USER_COMMON/config.json" <<CONFIG
@@ -24,34 +78,34 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  		"pass": "",
  		"name": ""
  	},
- 	"port": "",
- 	"interface": "",
- 	"tmp_path": "/tmp/semaphore",
- 	"cookie_hash": "${cookie_hash}",
- 	"cookie_encryption": "${cookie_encryption}",
- 	"email_sender": "",
- 	"email_host": "",
- 	"email_port": "",
- 	"web_host": "",
- 	"ldap_binddn": "",
- 	"ldap_bindpassword": "",
- 	"ldap_server": "",
- 	"ldap_searchdn": "",
- 	"ldap_searchfilter": "",
+ 	"port": 				"${port}",
+ 	"interface": 			"${interface}",
+ 	"tmp_path": 			"/tmp/semaphore",
+ 	"cookie_hash": 			"${cookie_hash}",
+ 	"cookie_encryption": 	"${cookie_encryption}",
+ 	"email_sender": 		"${email_sender}",
+ 	"email_host": 			"${email_host}",
+ 	"email_port": 			"${email_port}",
+ 	"web_host": 			"${web_host}",
+ 	"ldap_binddn": 			"${ldap_binddn}",
+ 	"ldap_bindpassword": 	"${ldap_bindpassword}",
+ 	"ldap_server": 			"${ldap_server}",
+ 	"ldap_searchdn": 		"${ldap_searchdn}",
+ 	"ldap_searchfilter": 	"${ldap_searchfilter}",
  	"ldap_mappings": {
- 		"dn": "",
- 		"mail": "",
- 		"uid": "",
- 		"cn": ""
+ 		"dn": 	"${ldap_searchfilter_dn}",
+ 		"mail": "${ldap_searchfilter_mail}",
+ 		"uid": 	"${ldap_searchfilter_uid}",
+ 		"cn": 	"${ldap_searchfilter_cn}"
  	},
- 	"telegram_chat": "",
- 	"telegram_token": "",
- 	"concurrency_mode": "",
- 	"max_parallel_tasks": 0,
- 	"email_alert": false,
- 	"telegram_alert": false,
- 	"ldap_enable": false,
- 	"ldap_needtls": false
+ 	"telegram_chat": 		"${telegram_chat}",
+ 	"telegram_token": 		"${telegram_token}",
+ 	"concurrency_mode": 	"${concurrency_mode}",
+ 	"max_parallel_tasks": 	${max_parallel_tasks},
+ 	"email_alert": 			${email_alert},
+ 	"telegram_alert": 		${telegram_alert},
+ 	"ldap_enable": 			${ldap_enable},
+ 	"ldap_needtls": 		${ldap_needtls}
 }
 CONFIG
 
