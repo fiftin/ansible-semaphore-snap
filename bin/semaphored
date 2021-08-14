@@ -55,4 +55,4 @@ tee "/$SNAP_USER_COMMON/config.json" <<CONFIG
 }
 CONFIG
 
-./sempahore -config "/$SNAP_USER_COMMON/config.json"
+sempahore -config "/$SNAP_USER_COMMON/config.json"
