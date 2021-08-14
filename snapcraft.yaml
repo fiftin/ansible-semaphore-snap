@@ -8,9 +8,9 @@ description: |
 
 grade: devel
 confinement: classic
-architectures:
-  - amd64
-  - arm64
+# architectures:
+#   - amd64
+#   - arm64
 
 apps:
   semaphored:
@@ -31,6 +31,7 @@ parts:
     source:
       - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
       - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_arm64.deb
+      - else fail
     source-type: deb
 
   semaphored:
