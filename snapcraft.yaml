@@ -7,7 +7,7 @@ description: |
   If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
 
 grade: devel
-confinement: classic
+confinement: strict
 architectures: [arm64, amd64]
 
 apps:
