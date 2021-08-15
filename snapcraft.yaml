@@ -8,7 +8,7 @@ description: |
 
 grade: devel
 confinement: strict
-architectures: []
+architectures: [amd64, arm64]
 
 apps:
   semaphored:
