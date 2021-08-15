@@ -8,7 +8,6 @@ description: |
 grade: devel
 confinement: strict
 architectures:
-  - arm64
   - amd64
 apps:
   semaphored:
@@ -26,7 +25,9 @@ parts:
     plugin: dump
     source:
       - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_arm64.deb
-      - else fail
+      - else:
+        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
+        - else fail
     source-type: deb
   semaphored:
     plugin: nil
