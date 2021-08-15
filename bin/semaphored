@@ -109,4 +109,4 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 }
 CONFIG
 
-semaphore -config "$SNAP_USER_COMMON/config.json"
+$SNAP/semaphore -config "$SNAP_USER_COMMON/config.json"

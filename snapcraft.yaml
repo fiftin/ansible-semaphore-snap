@@ -8,6 +8,9 @@ description: |
 
 grade: devel
 confinement: classic
+architectures:
+  - build-on: all
+    run-on: [arm64, amd64]
 
 apps:
   semaphored:
@@ -25,23 +28,10 @@ apps:
 parts:
   semaphore:
     plugin: dump
-    source: https://github.com/ansible-semaphore/semaphore/archive/refs/tags/v2.7.1.tar.gz
-    source-type: tar
-    build-packages:
-      - curl
-    build-snaps:
-      - go
-      - node/14/stable
-    override-build: |
-      export GOPATH=/root/go
-      export GOBIN=$GOPATH/bin
-      export PATH=$PATH:$GOBIN
-      go install github.com/go-task/task/v3/cmd/task@latest
-      task deps
-      task compile
-      task build:local
-      cp bin/semaphore $SNAPCRAFT_PART_INSTALL/semaphore
-      
+    source:
+      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_arm64.deb
+      - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.1/semaphore_2.7.1_linux_amd64.deb
+    source-type: deb
 
   semaphored:
     plugin: nil
