@@ -8,9 +8,7 @@ description: |
 
 grade: devel
 confinement: strict
-architectures:
-  - build-on: all
-    run-on: [arm64, amd64]
+architectures: [arm64]
 
 apps:
   semaphored:
