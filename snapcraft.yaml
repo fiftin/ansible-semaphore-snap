@@ -24,20 +24,15 @@ apps:
 
 parts:
   semaphore:
-    plugin: nil
+    plugin: dump
     source: https://github.com/ansible-semaphore/semaphore/archive/refs/tags/v2.7.1.tar.gz
     source-type: tar
     build-packages:
       - curl
-      - gcc 
-      - g++ 
-      - make
     build-snaps:
       - go
+      - node/14/stable
     override-build: |
-      curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-      bash nodesource_setup.sh
-      apt install nodejs -y
       export GOPATH=/root/go
       export GOBIN=$GOPATH/bin
       export PATH=$PATH:$GOBIN
