@@ -9,6 +9,7 @@ grade: devel
 confinement: strict
 architectures:
   - arm64
+  - amd64
 apps:
   semaphored:
     command: semaphored
