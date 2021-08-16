@@ -109,4 +109,12 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 }
 CONFIG
 
+tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
+
+ln -sf $SNAP/usr/bin/python3 $SNAP_USER_COMMON/ansible_env/bin/python3
+
+sed -i "s@^VIRTUAL_ENV=\".*@VIRTUAL_ENV=\"$SNAP_USER_COMMON/ansible_env\"@g" $SNAP_USER_COMMON/ansible_env/bin/activate
+
+source $SNAP_USER_COMMON/ansible_env/bin/activate
+
 semaphore -config "$SNAP_USER_COMMON/config.json"
