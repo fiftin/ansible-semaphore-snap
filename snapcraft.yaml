@@ -46,19 +46,39 @@ parts:
     plugin: python
     source: .
     build-packages:
-      - python3-pip
+      - build-essential
+      - cargo
+      - libssl-dev
+      - libffi-dev
+      - python3-venv
       - python3.6-venv
       - python3-dev
+      - libffi-dev
+      - libc-dev
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+      - curl
     stage-packages:
-      - python3-pip
+      - python3-venv
       - python3.6-venv
       - python3-dev
+      - libffi-dev
+      - libc-dev
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+      - curl
     override-build: |
       python3 -m venv ansible_env
 
       export PATH=ansible_env/bin:$PATH
 
-      export CRYPTOGRAPHY_DONT_BUILD_RUST=1
+      CRYPTOGRAPHY_DONT_BUILD_RUST=1
+
+      pip3 install --upgrade pip
+
+      pip3 install setuptools_rust
       
       pip3 install wheel
       
