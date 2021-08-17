@@ -1,14 +1,19 @@
 name: semaphore
+
 base: core18
+
 version: 2.7.2
+
 summary: Modern UI for Ansible
+
 description: |
   Ansible Semaphore is beautiful web interface for running Ansible playbooks.
   If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
+
 grade: stable
+
 confinement: strict
-architectures:
-  - arm64
+
 apps:
   semaphored:
     command: bin/snapcraft-preload $SNAP/semaphored
