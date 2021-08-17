@@ -23,6 +23,7 @@ apps:
     plugs:
       - network-bind
       - network
+      - ssh-keys
 
 parts:
   semaphore:
