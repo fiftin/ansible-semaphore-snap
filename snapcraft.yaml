@@ -7,9 +7,6 @@ description: |
   If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
 grade: stable
 confinement: strict
-architectures:
-  - amd64
-  - arm64
 apps:
   semaphored:
     command: bin/snapcraft-preload $SNAP/semaphored
