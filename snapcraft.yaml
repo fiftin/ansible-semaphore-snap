@@ -5,7 +5,7 @@ summary: Modern UI for Ansible
 description: |
   Ansible Semaphore is beautiful web interface for running Ansible playbooks.
   If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
-grade: devel
+grade: stable
 confinement: strict
 architectures:
   - amd64
@@ -20,12 +20,10 @@ apps:
       - mount-observe
 
   semaphore:
-    command: bin/snapcraft-preload $SNAP/semaphore -config $SNAP_USER_COMMON/config.json
+    command: $SNAP/semaphore -config $SNAP_USER_COMMON/config.json
     plugs:
       - network-bind
       - network
-      - ssh-keys
-      - mount-observe
 
 parts:
   snapcraft-preload:
