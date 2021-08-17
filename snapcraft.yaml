@@ -16,11 +16,14 @@ apps:
     plugs:
       - network-bind
       - network
+      - ssh-keys
+
   semaphore:
     command: semaphore -config $SNAP_USER_COMMON/config.json
     plugs:
       - network-bind
       - network
+
 parts:
   semaphore:
     plugin: dump
