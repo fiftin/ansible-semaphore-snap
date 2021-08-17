@@ -11,21 +11,31 @@ architectures:
   - amd64
 apps:
   semaphored:
-    command: semaphored
+    command: bin/snapcraft-preload $SNAP/semaphored
     daemon: simple
     plugs:
       - network-bind
       - network
       - ssh-keys
+      - mount-observe
 
   semaphore:
-    command: semaphore -config $SNAP_USER_COMMON/config.json
+    command: bin/snapcraft-preload $SNAP/semaphore -config $SNAP_USER_COMMON/config.json
     plugs:
       - network-bind
       - network
       - ssh-keys
+      - mount-observe
 
 parts:
+  snapcraft-preload:
+      source: https://github.com/sergiusens/snapcraft-preload.git
+      plugin: cmake
+      build-packages:
+        - on amd64:
+          - gcc-multilib
+          - g++-multilib
+          
   semaphore:
     plugin: dump
     source:
@@ -60,21 +70,12 @@ parts:
       - python3-venv
     override-build: |
       python3 -m venv ansible_env
-
       export PATH=ansible_env/bin:$PATH
-
       CRYPTOGRAPHY_DONT_BUILD_RUST=1
-
       pip3 install --upgrade pip
-
       pip3 install setuptools_rust
-      
       pip3 install wheel
-      
       pip3 install setuptools
-      
       pip3 install ansible
-
       tar cfz ansible_env.tar.gz ansible_env
-
       cp ansible_env.tar.gz $SNAPCRAFT_PART_INSTALL
