@@ -36,6 +36,7 @@ parts:
     source-type: deb
     stage-packages:
       - git
+      - openssl-client
 
   semaphored:
     plugin: nil
@@ -46,6 +47,7 @@ parts:
       cp semaphored $SNAPCRAFT_PART_INSTALL/semaphored
     stage-packages:
       - git
+      - openssl-client
 
   ansible:
     plugin: python
