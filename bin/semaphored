@@ -149,5 +149,5 @@ fi
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
 
-semaphore -config "$SNAP_USER_COMMON/config.json"
+semaphore service --config "$SNAP_USER_COMMON/config.json"
 

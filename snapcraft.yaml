@@ -33,7 +33,7 @@ apps:
       - mount-observe
 
   semaphore:
-    command: $SNAP/semaphore
+    command: semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
     plugs:
@@ -51,11 +51,11 @@ parts:
   semaphore:
     plugin: dump
     source:
-      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.2/semaphore_2.7.7_linux_arm64.deb
+      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.7/semaphore_2.7.7_linux_arm64.deb
       - else:
-        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.2/semaphore_2.7.7_linux_amd64.deb
+        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.7/semaphore_2.7.7_linux_amd64.deb
         - else:
-          - on amdhf: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.2/semaphore_2.7.7_linux_arm.deb
+          - on amdhf: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.7/semaphore_2.7.7_linux_arm.deb
           - else fail
     source-type: deb
 
