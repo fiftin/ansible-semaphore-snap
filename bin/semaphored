@@ -1,6 +1,14 @@
 #!/bin/bash
 
-
+dialect=$(snapctl get dialect)
+mysql_host=$(snapctl get mysql.host)
+mysql_user=$(snapctl get mysql.user)
+mysql_name=$(snapctl get mysql.name)
+mysql_pass=$(snapctl get mysql.pass)
+postgres_host=$(snapctl get postgres.host)
+postgres_user=$(snapctl get postgres.user)
+postgres_name=$(snapctl get postgres.name)
+postgres_pass=$(snapctl get postgres.pass)
 port=$(snapctl get port)
 interface=$(snapctl get interface)
 tmp_path="/tmp/semaphore",
@@ -27,6 +35,11 @@ concurrency_mode=$(snapctl get concurrency-mode)
 max_parallel_tasks=$(snapctl get max-parallel-tasks)
 port=$(snapctl get port)
 
+if [ -z "$dialect" ]
+then
+  dialect=bolt
+  snapctl set dialect="$dialect"
+fi
 
 if [ -z "$cookie_hash" ]
 then
@@ -74,12 +87,22 @@ mkdir -p ${SNAP_USER_COMMON}/repositories
 
 tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 {
+ 	"mysql": {
+ 		"host": "${mysql_host}",
+ 		"user": "${mysql_user}",
+ 		"pass": "${mysql_pass}",
+ 		"name": "${mysql_name}"
+ 	},
+ 	"postgres": {
+ 		"host": "${postgres_host}",
+ 		"user": "${postgres_user}",
+ 		"pass": "${postgres_pass}",
+ 		"name": "${postgres_name}"
+ 	},
  	"bolt": {
  		"host": "${SNAP_USER_COMMON}/database.boltdb",
- 		"user": "",
- 		"pass": "",
- 		"name": ""
  	},
+	"dialect":				"${dialect}",
  	"port": 				"${port}",
  	"interface": 			"${interface}",
  	"tmp_path": 			"${SNAP_USER_COMMON}/repositories",
