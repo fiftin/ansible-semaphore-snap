@@ -100,7 +100,7 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  		"name": "${postgres_name}"
  	},
  	"bolt": {
- 		"host": "${SNAP_USER_COMMON}/database.boltdb",
+ 		"host": "${SNAP_USER_COMMON}/database.boltdb"
  	},
 	"dialect":				"${dialect}",
  	"port": 				"${port}",

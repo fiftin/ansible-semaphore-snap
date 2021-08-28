@@ -33,7 +33,7 @@ apps:
       - mount-observe
 
   semaphore:
-    command: semaphore
+    command: $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
     plugs:
@@ -66,6 +66,8 @@ parts:
     override-build: |
       chmod +x semaphored
       cp semaphored $SNAPCRAFT_PART_INSTALL/semaphored
+      chmod +x semaphore
+      cp semaphore $SNAPCRAFT_PART_INSTALL/semaphore
     stage-packages:
       - git
       - openssh-client
