@@ -84,9 +84,7 @@ parts:
       export PATH=ansible_env/bin:$PATH
       CRYPTOGRAPHY_DONT_BUILD_RUST=1
       pip3 install --upgrade pip
-      pip3 install setuptools_rust
-      pip3 install wheel
-      pip3 install setuptools
+      pip3 install setuptools_rust wheel setuptools botocore boto3
       pip3 install ansible
       tar cfz ansible_env.tar.gz ansible_env
       cp ansible_env.tar.gz $SNAPCRAFT_PART_INSTALL
