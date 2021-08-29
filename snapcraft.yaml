@@ -4,15 +4,14 @@ base: core18
 
 version: 2.7.7
 
-contact: denis@ansible-semaphore.com
-
+# contact: denis@ansible-semaphore.com
 # issues: https://github.com/ansible-semaphore/semaphore/issues
+# source-code: https://github.com/ansible-semaphore/semaphore
+
 
 license: MIT
 
 summary: Modern UI for Ansible
-
-# source-code: https://github.com/ansible-semaphore/semaphore
 
 description: |
   Ansible Semaphore is beautiful web interface for running Ansible playbooks.
