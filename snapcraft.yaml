@@ -75,9 +75,8 @@ parts:
     plugin: python
     source: .
     build-packages:
-      - build-essential
-      - libssl-dev
       - python3-venv
+      - python3-dev
     stage-packages:
       - python3-venv
     override-build: |
