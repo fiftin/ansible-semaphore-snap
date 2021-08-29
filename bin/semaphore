@@ -1,8 +1,6 @@
 #!/bin/bash
 
-curr_user=$(whoami)
-
-if [ $curr_user != "root" ]
+if [ $USER != "root" ]
 then
   echo "Use sudo to execute semaphore commands"
   exit 1
