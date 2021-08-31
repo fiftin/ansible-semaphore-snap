@@ -4,11 +4,6 @@ base: core18
 
 version: 2.7.11
 
-# contact: denis@ansible-semaphore.com
-# issues: https://github.com/ansible-semaphore/semaphore/issues
-# source-code: https://github.com/ansible-semaphore/semaphore
-s
-
 license: MIT
 
 summary: Modern UI for Ansible
