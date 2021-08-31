@@ -147,6 +147,14 @@ then
 	sed -i "s@/build/semaphore/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" $SNAP_USER_COMMON/ansible_env/bin/*
 fi
 
+export ANSIBLE_CONFIG=<<CONFIG
+[defaults]
+host_key_checking = False
+stdout_callback = yaml
+bin_ansible_callbacks = yes
+default_local_tmp = /tmp
+CONFIG
+
 source $SNAP_USER_COMMON/ansible_env/bin/activate
 
 semaphore service --config "$SNAP_USER_COMMON/config.json"
