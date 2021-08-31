@@ -147,13 +147,10 @@ then
 	sed -i "s@/build/semaphore/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" $SNAP_USER_COMMON/ansible_env/bin/*
 fi
 
-ANSIBLE_CONFIG="
-[defaults]
-host_key_checking = False
-stdout_callback = yaml
-bin_ansible_callbacks = yes
-local_tmp = /tmp
-"
+export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_STDOUT_CALLBACK=yaml
+export ANSIBLE_LOAD_CALLBACK_PLUGINS=yes
+export ANSIBLE_LOCAL_TEMP=/tmp
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
 
