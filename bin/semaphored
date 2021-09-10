@@ -136,7 +136,7 @@ CONFIG
 
 if [ -d $SNAP_USER_COMMON/ansible_env ] && [ ! -f $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision ]
 then
-  mv $SNAP_USER_COMMON/ansible_env $SNAP_USER_COMMON/ansible_env_backup90
+  mv $SNAP_USER_COMMON/ansible_env $SNAP_USER_COMMON/ansible_env_backup_90_$RANDOM
   sleep 1
 fi
 
