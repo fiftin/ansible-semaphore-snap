@@ -52,8 +52,6 @@ parts:
       - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.16/semaphore_2.7.16_linux_arm64.deb
       - else:
         - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.16/semaphore_2.7.16_linux_amd64.deb
-        # - else:
-        #   - on armhf: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.16/semaphore_2.7.16_linux_arm.deb
         - else fail
     source-type: deb
 
@@ -74,18 +72,13 @@ parts:
     plugin: python
     source: .
     build-packages:
-      - python3-venv
-      - python3-dev
-    stage-packages:
-      - python3-venv
+      - python3-pip
       - python3.6-venv
       - python3-dev
-      - libffi-dev
-      - libc-dev
+    stage-packages:
       - python3-pip
-      - python3-setuptools
-      - python3-wheel
-      - curl
+      - python3.6-venv
+      - python3-dev
     override-build: |
       python3 -m venv ansible_env
       export PATH=ansible_env/bin:$PATH
