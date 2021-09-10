@@ -136,10 +136,11 @@ CONFIG
 
 if [ -d $SNAP_USER_COMMON/ansible_env ] && [ ! -f $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision ]
 then
-  rm -rf $SNAP_USER_COMMON/ansible_env
+  mv $SNAP_USER_COMMON/ansible_env $SNAP_USER_COMMON/ansible_env_backup90
+  sleep 1
 fi
 
-if [ ! -d $SNAP_USER_COMMON/ansible_env ]
+if [ ! -d $SNAP_USER_COMMON/ansible_env ] || [ ! "$(ls -A $SNAP_USER_COMMON/ansible_env)" ]
 then
 	tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
 
