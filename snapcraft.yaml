@@ -78,6 +78,14 @@ parts:
       - python3-dev
     stage-packages:
       - python3-venv
+      - python3.6-venv
+      - python3-dev
+      - libffi-dev
+      - libc-dev
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+      - curl
     override-build: |
       python3 -m venv ansible_env
       export PATH=ansible_env/bin:$PATH
