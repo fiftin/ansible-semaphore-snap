@@ -136,6 +136,13 @@ CONFIG
 
 if [ ! -d $SNAP_USER_COMMON/ansible_env ]
 then
+  if [ ! -f $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision ]
+    rm -rf $SNAP_USER_COMMON/ansible_env
+  fi
+fi
+
+if [ ! -d $SNAP_USER_COMMON/ansible_env ]
+then
 	tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
 
 	ln -sf $SNAP/usr/bin/python3 $SNAP_USER_COMMON/ansible_env/bin/python3
@@ -145,6 +152,8 @@ then
 	sed -i "s@/root/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" $SNAP_USER_COMMON/ansible_env/bin/*
 
 	sed -i "s@/build/semaphore/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" $SNAP_USER_COMMON/ansible_env/bin/*
+
+  echo $SNAP_REVISION > $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision
 fi
 
 export ANSIBLE_HOST_KEY_CHECKING=False
