@@ -159,6 +159,13 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 export ANSIBLE_STDOUT_CALLBACK=yaml
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=yes
 export ANSIBLE_LOCAL_TEMP=/tmp
+export ANSIBLE_CONFIG="
+[defaults]
+host_key_checking = False
+stdout_callback = yaml
+bin_ansible_callbacks = yes
+local_tmp = /tmp
+"
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
 
