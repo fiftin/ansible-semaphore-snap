@@ -143,7 +143,7 @@ fi
 if [ ! -d $SNAP_USER_COMMON/ansible_env ] || [ ! "$(ls -A $SNAP_USER_COMMON/ansible_env)" ]
 then
 	tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
-	
+
 	sed -i "s@^VIRTUAL_ENV=\".*@VIRTUAL_ENV=\"$SNAP_USER_COMMON/ansible_env\"@g" $SNAP_USER_COMMON/ansible_env/bin/activate
 
  	find $SNAP_USER_COMMON/ansible_env/bin -type f -exec sed -i "s@/root/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" {} \;
@@ -159,13 +159,15 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 export ANSIBLE_STDOUT_CALLBACK=yaml
 export ANSIBLE_LOAD_CALLBACK_PLUGINS=yes
 export ANSIBLE_LOCAL_TEMP=/tmp
-export ANSIBLE_CONFIG="
+export ANSIBLE_CONFIG=$SNAP_USER_COMMON/ansible.cfg
+
+tee "$SNAP_USER_COMMON/ansible.cfg" <<CONFIG
 [defaults]
 host_key_checking = False
 stdout_callback = yaml
 bin_ansible_callbacks = yes
 local_tmp = /tmp
-"
+CONFIG
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
 
