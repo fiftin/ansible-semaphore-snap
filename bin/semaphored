@@ -11,7 +11,6 @@ postgres_name=$(snapctl get postgres.name)
 postgres_pass=$(snapctl get postgres.pass)
 port=$(snapctl get port)
 interface=$(snapctl get interface)
-tmp_path="/tmp/semaphore",
 cookie_hash=$(snapctl get cookie-hash)
 cookie_encryption=$(snapctl get cookie-encryption)
 email_sender=$(snapctl get email-sender)
@@ -118,10 +117,10 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"ldap_searchdn": 		"${ldap_searchdn}",
  	"ldap_searchfilter": 	"${ldap_searchfilter}",
  	"ldap_mappings": {
- 		"dn": 	"${ldap_searchfilter_dn}",
- 		"mail": "${ldap_searchfilter_mail}",
- 		"uid": 	"${ldap_searchfilter_uid}",
- 		"cn": 	"${ldap_searchfilter_cn}"
+ 		"dn": 	"${ldap_mappings_dn}",
+ 		"mail": "${ldap_mappings_mail}",
+ 		"uid": 	"${ldap_mappings_uid}",
+ 		"cn": 	"${ldap_mappings_cn}"
  	},
  	"telegram_chat": 		"${telegram_chat}",
  	"telegram_token": 		"${telegram_token}",
