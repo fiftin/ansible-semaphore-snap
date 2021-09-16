@@ -67,6 +67,7 @@ parts:
     stage-packages:
       - git
       - openssh-client
+      - sshpass
 
   ansible:
     plugin: python
