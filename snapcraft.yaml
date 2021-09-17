@@ -2,7 +2,7 @@ name: semaphore
 
 base: core18
 
-version: 2.7.21
+version: 2.7.22
 
 license: MIT
 
@@ -49,9 +49,9 @@ parts:
   semaphore:
     plugin: dump
     source:
-      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.21/semaphore_2.7.21_linux_arm64.deb
+      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.22/semaphore_2.7.22_linux_arm64.deb
       - else:
-        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.21/semaphore_2.7.21_linux_amd64.deb
+        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.7.22/semaphore_2.7.22_linux_amd64.deb
         - else fail
     source-type: deb
 
