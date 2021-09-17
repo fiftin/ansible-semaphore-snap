@@ -1,46 +1,63 @@
 #!/bin/bash
 
-dialect=$(snapctl get dialect)
-mysql_host=$(snapctl get mysql.host)
-mysql_user=$(snapctl get mysql.user)
-mysql_name=$(snapctl get mysql.name)
-mysql_pass=$(snapctl get mysql.pass)
-postgres_host=$(snapctl get postgres.host)
-postgres_user=$(snapctl get postgres.user)
-postgres_name=$(snapctl get postgres.name)
-postgres_pass=$(snapctl get postgres.pass)
-port=$(snapctl get port)
-interface=$(snapctl get interface)
-cookie_hash=$(snapctl get cookie-hash)
-cookie_encryption=$(snapctl get cookie-encryption)
-email_sender=$(snapctl get email-sender)
-email_host=$(snapctl get email-host)
-email_port=$(snapctl get email-port)
-web_host=$(snapctl get web-host)
-ldap_binddn=$(snapctl get ldap-binddn)
-ldap_bindpassword=$(snapctl get ldap-bindpassword)
-ldap_server=$(snapctl get ldap-server)
-ldap_searchdn=$(snapctl get ldap-searchdn)
-ldap_searchfilter=$(snapctl get ldap-searchfilter)
+declare -A options=(
+  [dialect]=""
+  [mysql_host]=""
+  [mysql_user]=""
+  [mysql_name]=""
+  [mysql_pass]=""
+  [postgres_host]=""
+  [postgres_user]=""
+  [postgres_name]=""
+  [postgres_pass]=""
+  [port]=""
+  [interface]=""
+  [cookie-hash]=""
+  [cookie-encryption]=""
+  [email-sender]=""
+  [email-host]=""
+  [email-port]=""
+  [web-host]=""
+  [ldap-binddn]=""
+  [ldap-bindpassword]=""
+  [ldap-server]=""
+  [ldap-searchdn]=""
+  [ldap-searchfilter]=""
+  [ldap-mappings_dn]=""
+  [ldap-mappings_mail]=""
+  [ldap-mappings_uid]=""
+  [ldap-mappings_cn]=""
+  [telegram-chat]=""
+  [telegram-token]=""
+  [concurrency-mode]=""
+  [max-parallel-tasks]=""
+)
 
-ldap_mappings_dn=$(snapctl get ldap-mappings.dn)
-ldap_mappings_mail=$(snapctl get ldap-mappings.mail)
-ldap_mappings_uid=$(snapctl get ldap-mappings.uid)
-ldap_mappings_cn=$(snapctl get ldap-mappings.cn)
 
-telegram_chat=$(snapctl get telegram-chat)
-telegram_token=$(snapctl get telegram-token)
-concurrency_mode=$(snapctl get concurrency-mode)
-max_parallel_tasks=$(snapctl get max-parallel-tasks)
-port=$(snapctl get port)
 
-if [ -z "$dialect" ]
+for i in "${!options[@]}"
+do
+  options[$i]=$(snapctl get "$i")
+done
+
+
+for i in "${!options[@]}"
+do
+  if [ -z "${options[$i]}" ]
+  then
+    snapctl set "$i"="${options[$i]}"
+  fi
+done
+
+
+
+if [ -z "${options[dialect]}" ]
 then
-  dialect=bolt
-  snapctl set dialect="$dialect"
+  options[dialect]=bolt
+  snapctl set dialect="${options[dialect]}"
 fi
 
-if [ -z "$cookie_hash" ]
+if [ -z "${options[cookie-hash]}" ]
 then
   cookie_hash=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 32 ; echo '')
   snapctl set cookie-hash="$cookie_hash"
@@ -82,54 +99,56 @@ then
   snapctl set ldap-needtls="$ldap_needtls"
 fi
 
+
+
 mkdir -p ${SNAP_USER_COMMON}/repositories
 
 tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 {
  	"mysql": {
- 		"host": "${mysql_host}",
- 		"user": "${mysql_user}",
- 		"pass": "${mysql_pass}",
- 		"name": "${mysql_name}"
+ 		"host": "${options[mysql_host]}",
+ 		"user": "${options[mysql_user]}",
+ 		"pass": "${options[mysql_pass]}",
+ 		"name": "${options[mysql_name]}"
  	},
  	"postgres": {
- 		"host": "${postgres_host}",
- 		"user": "${postgres_user}",
- 		"pass": "${postgres_pass}",
- 		"name": "${postgres_name}"
+ 		"host": "${options[postgres_host]}",
+ 		"user": "${options[postgres_user]}",
+ 		"pass": "${options[postgres_pass]}",
+ 		"name": "${options[postgres_name]}"
  	},
  	"bolt": {
  		"host": "${SNAP_USER_COMMON}/database.boltdb"
  	},
-	"dialect":				"${dialect}",
- 	"port": 				"${port}",
- 	"interface": 			"${interface}",
+	"dialect":				"${options[dialect]}",
+ 	"port": 				"${options[port]}",
+ 	"interface": 			"${options[interface]}",
  	"tmp_path": 			"${SNAP_USER_COMMON}/repositories",
- 	"cookie_hash": 			"${cookie_hash}",
- 	"cookie_encryption": 	"${cookie_encryption}",
- 	"email_sender": 		"${email_sender}",
- 	"email_host": 			"${email_host}",
- 	"email_port": 			"${email_port}",
- 	"web_host": 			"${web_host}",
- 	"ldap_binddn": 			"${ldap_binddn}",
- 	"ldap_bindpassword": 	"${ldap_bindpassword}",
- 	"ldap_server": 			"${ldap_server}",
- 	"ldap_searchdn": 		"${ldap_searchdn}",
- 	"ldap_searchfilter": 	"${ldap_searchfilter}",
+ 	"cookie_hash": 			"${options[cookie-hash]}",
+ 	"cookie_encryption": 	"${options[cookie-encryption]}",
+ 	"email_sender": 		"${options[email-sender]}",
+ 	"email_host": 			"${options[email-host]}",
+ 	"email_port": 			"${options[email-port]}",
+ 	"web_host": 			"${web-host}",
+ 	"ldap_binddn": 			"${ldap-binddn}",
+ 	"ldap_bindpassword": 	"${ldap-bindpassword}",
+ 	"ldap_server": 			"${ldap-server}",
+ 	"ldap_searchdn": 		"${ldap-searchdn}",
+ 	"ldap_searchfilter": 	"${ldap-searchfilter}",
  	"ldap_mappings": {
- 		"dn": 	"${ldap_mappings_dn}",
- 		"mail": "${ldap_mappings_mail}",
- 		"uid": 	"${ldap_mappings_uid}",
- 		"cn": 	"${ldap_mappings_cn}"
+ 		"dn": 	"${ldap-mappings_dn}",
+ 		"mail": "${ldap-mappings_mail}",
+ 		"uid": 	"${ldap-mappings_uid}",
+ 		"cn": 	"${ldap-mappings_cn}"
  	},
- 	"telegram_chat": 		"${telegram_chat}",
- 	"telegram_token": 		"${telegram_token}",
- 	"concurrency_mode": 	"${concurrency_mode}",
- 	"max_parallel_tasks": 	${max_parallel_tasks},
- 	"email_alert": 			${email_alert},
- 	"telegram_alert": 		${telegram_alert},
- 	"ldap_enable": 			${ldap_enable},
- 	"ldap_needtls": 		${ldap_needtls}
+ 	"telegram_chat": 		"${telegram-chat}",
+ 	"telegram_token": 		"${telegram-token}",
+ 	"concurrency_mode": 	"${concurrency-mode}",
+ 	"max_parallel_tasks": 	${max-parallel-tasks},
+ 	"email_alert": 			${email-alert},
+ 	"telegram_alert": 	${telegram-alert},
+ 	"ldap_enable": 			${ldap-enable},
+ 	"ldap_needtls": 		${ldap-needtls}
 }
 CONFIG
 
