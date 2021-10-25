@@ -32,7 +32,6 @@ telegram_chat=$(snapctl get telegram-chat)
 telegram_token=$(snapctl get telegram-token)
 concurrency_mode=$(snapctl get concurrency-mode)
 max_parallel_tasks=$(snapctl get max-parallel-tasks)
-port=$(snapctl get port)
 
 if [ -z "$dialect" ]
 then
