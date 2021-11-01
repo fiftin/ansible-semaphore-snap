@@ -13,10 +13,12 @@ port=$(snapctl get port)
 interface=$(snapctl get interface)
 cookie_hash=$(snapctl get cookie-hash)
 cookie_encryption=$(snapctl get cookie-encryption)
+
 email_sender=$(snapctl get email-sender)
 email_host=$(snapctl get email-host)
 email_port=$(snapctl get email-port)
 web_host=$(snapctl get web-host)
+
 ldap_binddn=$(snapctl get ldap-binddn)
 ldap_bindpassword=$(snapctl get ldap-bindpassword)
 ldap_server=$(snapctl get ldap-server)
@@ -32,6 +34,11 @@ telegram_chat=$(snapctl get telegram-chat)
 telegram_token=$(snapctl get telegram-token)
 concurrency_mode=$(snapctl get concurrency-mode)
 max_parallel_tasks=$(snapctl get max-parallel-tasks)
+
+ldap_enable=$(snapctl get ldap-enable)
+ldap_needtls=$(snapctl get ldap-needtls)
+email_alert=$(snapctl get email-alert)
+telegram_alert=$(snapctl get telegram-alert)
 
 if [ -z "$dialect" ]
 then
