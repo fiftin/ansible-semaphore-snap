@@ -13,6 +13,7 @@ port=$(snapctl get port)
 interface=$(snapctl get interface)
 cookie_hash=$(snapctl get cookie-hash)
 cookie_encryption=$(snapctl get cookie-encryption)
+access_key_encryption=$(snapctl get access-key-encryption)
 
 email_sender=$(snapctl get email-sender)
 email_host=$(snapctl get email-host)
@@ -39,6 +40,7 @@ ldap_enable=$(snapctl get ldap-enable)
 ldap_needtls=$(snapctl get ldap-needtls)
 email_alert=$(snapctl get email-alert)
 telegram_alert=$(snapctl get telegram-alert)
+demo_mode=$(snapctl get demo-mode)
 
 if [ -z "$dialect" ]
 then
@@ -74,6 +76,12 @@ if [ -z "$telegram_alert" ]
 then
   telegram_alert=false
   snapctl set telegram-alert="$telegram_alert"
+fi
+
+if [ -z "$demo_mode" ]
+then
+  demo_mode=false
+  snapctl set demo-mode="$demo_mode"
 fi
 
 if [ -z "$ldap_enable" ]
@@ -113,6 +121,7 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"tmp_path": 			"${SNAP_USER_COMMON}/repositories",
  	"cookie_hash": 			"${cookie_hash}",
  	"cookie_encryption": 	"${cookie_encryption}",
+ 	"access_key_encryption":"${access_key_encryption}",
  	"email_sender": 		"${email_sender}",
  	"email_host": 			"${email_host}",
  	"email_port": 			"${email_port}",
@@ -135,7 +144,8 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"email_alert": 			${email_alert},
  	"telegram_alert": 		${telegram_alert},
  	"ldap_enable": 			${ldap_enable},
- 	"ldap_needtls": 		${ldap_needtls}
+ 	"ldap_needtls": 		${ldap_needtls},
+ 	"demo_mode": 			${demo_mode}
 }
 CONFIG
 
