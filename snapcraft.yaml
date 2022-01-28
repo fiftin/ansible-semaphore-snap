@@ -8,6 +8,10 @@ license: MIT
 
 summary: Modern UI for Ansible
 
+architectures:
+- build-on: amd64
+- build-on: arm64
+
 description: |
   Ansible Semaphore is beautiful web interface for running Ansible playbooks.
   If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
@@ -21,20 +25,20 @@ apps:
     command: bin/snapcraft-preload $SNAP/semaphored
     daemon: simple
     plugs:
-      - network-bind
-      - network
-      - ssh-keys
-      - mount-observe
+    - network-bind
+    - network
+    - ssh-keys
+    - mount-observe
 
   semaphore:
     command: bin/snapcraft-preload $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
     plugs:
-      - network-bind
-      - network
-      - ssh-keys
-      - mount-observe
+    - network-bind
+    - network
+    - ssh-keys
+    - mount-observe
 
 
 parts:
@@ -42,17 +46,17 @@ parts:
       source: https://github.com/sergiusens/snapcraft-preload.git
       plugin: cmake
       build-packages:
-        - on amd64:
-          - gcc-multilib
-          - g++-multilib
+      - on amd64:
+        - gcc-multilib
+        - g++-multilib
           
   semaphore:
     plugin: dump
     source:
-      - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.8.36/semaphore_2.8.36_linux_arm64.deb
-      - else:
-        - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.8.36/semaphore_2.8.36_linux_amd64.deb
-        - else fail
+    - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.8.36/semaphore_2.8.36_linux_arm64.deb
+    - else:
+      - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.8.36/semaphore_2.8.36_linux_amd64.deb
+      - else fail
     source-type: deb
 
   semaphored:
@@ -65,18 +69,18 @@ parts:
       chmod +x semaphore
       cp semaphore $SNAPCRAFT_PART_INSTALL/semaphore
     stage-packages:
-      - git
-      - openssh-client
-      - sshpass
+    - git
+    - openssh-client
+    - sshpass
 
   ansible:
     plugin: python
     source: .
     build-packages:
-      - python3-venv
-      - python3-dev
+    - python3-venv
+    - python3-dev
     stage-packages:
-      - python3-venv
+    - python3-venv
     override-build: |
       python3 -m venv ansible_env
       export PATH=ansible_env/bin:$PATH
