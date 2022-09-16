@@ -182,6 +182,7 @@ host_key_checking = False
 stdout_callback = yaml
 bin_ansible_callbacks = yes
 local_tmp = /tmp
+remote_tmp = /tmp
 CONFIG
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
