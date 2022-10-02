@@ -18,6 +18,7 @@ access_key_encryption=$(snapctl get access-key-encryption)
 email_sender=$(snapctl get email-sender)
 email_host=$(snapctl get email-host)
 email_port=$(snapctl get email-port)
+email_secure=$(snapctl get email-secure)
 email_username=$(snapctl get email-username)
 email_password=$(snapctl get email-password)
 web_host=$(snapctl get web-host)
@@ -42,6 +43,7 @@ ldap_enable=$(snapctl get ldap-enable)
 ldap_needtls=$(snapctl get ldap-needtls)
 email_alert=$(snapctl get email-alert)
 telegram_alert=$(snapctl get telegram-alert)
+slack_alert=$(snapctl get slack-alert)
 demo_mode=$(snapctl get demo-mode)
 
 if [ -z "$dialect" ]
@@ -68,6 +70,12 @@ then
   snapctl set max-parallel-tasks="$max_parallel_tasks"
 fi
 
+if [ -z "$email_secure" ]
+then
+  email_secure=false
+  snapctl set email-secure="$email_secure"
+fi
+
 if [ -z "$email_alert" ]
 then
   email_alert=false
@@ -78,6 +86,12 @@ if [ -z "$telegram_alert" ]
 then
   telegram_alert=false
   snapctl set telegram-alert="$telegram_alert"
+fi
+
+if [ -z "$slack_alert" ]
+then
+  slack_alert=false
+  snapctl set slack-alert="$slack_alert"
 fi
 
 if [ -z "$demo_mode" ]
@@ -124,32 +138,34 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"cookie_hash": 			"${cookie_hash}",
  	"cookie_encryption": 	"${cookie_encryption}",
  	"access_key_encryption":"${access_key_encryption}",
- 	"email_sender": 		"${email_sender}",
- 	"email_host": 			"${email_host}",
- 	"email_port": 			"${email_port}",
+ 	"email_sender": 				"${email_sender}",
+ 	"email_host": 					"${email_host}",
+ 	"email_port": 					"${email_port}",
+ 	"email_secure": 				${email_secure},
  	"email_username": 			"${email_username}",
  	"email_password": 			"${email_password}",
- 	"web_host": 			"${web_host}",
- 	"ldap_binddn": 			"${ldap_binddn}",
- 	"ldap_bindpassword": 	"${ldap_bindpassword}",
- 	"ldap_server": 			"${ldap_server}",
- 	"ldap_searchdn": 		"${ldap_searchdn}",
- 	"ldap_searchfilter": 	"${ldap_searchfilter}",
+ 	"web_host": 						"${web_host}",
+ 	"ldap_binddn": 					"${ldap_binddn}",
+ 	"ldap_bindpassword": 		"${ldap_bindpassword}",
+ 	"ldap_server": 					"${ldap_server}",
+ 	"ldap_searchdn": 				"${ldap_searchdn}",
+ 	"ldap_searchfilter": 		"${ldap_searchfilter}",
  	"ldap_mappings": {
  		"dn": 	"${ldap_mappings_dn}",
  		"mail": "${ldap_mappings_mail}",
  		"uid": 	"${ldap_mappings_uid}",
  		"cn": 	"${ldap_mappings_cn}"
  	},
- 	"telegram_chat": 		"${telegram_chat}",
- 	"telegram_token": 		"${telegram_token}",
- 	"concurrency_mode": 	"${concurrency_mode}",
+ 	"telegram_chat": 				"${telegram_chat}",
+ 	"telegram_token": 			"${telegram_token}",
+ 	"concurrency_mode": 		"${concurrency_mode}",
  	"max_parallel_tasks": 	${max_parallel_tasks},
- 	"email_alert": 			${email_alert},
- 	"telegram_alert": 		${telegram_alert},
- 	"ldap_enable": 			${ldap_enable},
- 	"ldap_needtls": 		${ldap_needtls},
- 	"demo_mode": 			${demo_mode}
+ 	"email_alert": 					${email_alert},
+ 	"telegram_alert": 			${telegram_alert},
+ 	"slack_alert": 					${slack_alert},
+ 	"ldap_enable": 					${ldap_enable},
+ 	"ldap_needtls": 				${ldap_needtls},
+ 	"demo_mode": 						${demo_mode}
 }
 CONFIG
 
