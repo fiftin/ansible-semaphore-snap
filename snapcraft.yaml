@@ -22,7 +22,7 @@ confinement: strict
 
 apps:
   semaphored:
-    command: bin/snapcraft-preload $SNAP/semaphored
+    command: snapcraft-preload $SNAP/semaphored
     daemon: simple
     plugs:
     - network-bind
@@ -31,7 +31,7 @@ apps:
     - mount-observe
 
   semaphore:
-    command: bin/snapcraft-preload $SNAP/semaphore
+    command: snapcraft-preload $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
     plugs:
@@ -43,16 +43,16 @@ apps:
 
 parts:
   snapcraft-preload:
-      source: https://github.com/sergiusens/snapcraft-preload.git
-      plugin: cmake
-      build-packages:
-      - on amd64:
-        - gcc-multilib
-        - g++-multilib
-      stage-packages:
-      - on amd64:
-        - lib32stdc++6
-            
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+    - on amd64:
+      - gcc-multilib
+      - g++-multilib
+    stage-packages:
+    - on amd64:
+      - lib32stdc++6
+          
   semaphore:
     plugin: dump
     source:
