@@ -22,7 +22,7 @@ confinement: strict
 
 apps:
   semaphored:
-    command: snapcraft-preload $SNAP/semaphored
+    command: bin/snapcraft-preload $SNAP/semaphored
     daemon: simple
     plugs:
     - network-bind
@@ -31,7 +31,7 @@ apps:
     - mount-observe
 
   semaphore:
-    command: snapcraft-preload $SNAP/semaphore
+    command: bin/snapcraft-preload $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
     plugs:
