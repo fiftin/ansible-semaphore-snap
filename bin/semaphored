@@ -182,7 +182,9 @@ then
  	echo $SNAP_REVISION > $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision
 fi
 
-ln -sf $SNAP/usr/bin/python3 $SNAP_USER_COMMON/ansible_env/bin/python3
+python_path=$(which python3)
+
+ln -sf "${python_path}" "${SNAP_USER_COMMON}/ansible_env/bin/python3"
 
 export ANSIBLE_HOST_KEY_CHECKING=False
 export ANSIBLE_STDOUT_CALLBACK=yaml
