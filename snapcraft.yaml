@@ -74,6 +74,8 @@ parts:
       chmod +x semaphore
       cp semaphore $SNAPCRAFT_PART_INSTALL/semaphore
     stage-packages:
+    - python3
+    - python3-venv
     - git
     - openssh-client
     - sshpass
