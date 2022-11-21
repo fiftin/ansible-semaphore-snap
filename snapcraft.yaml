@@ -82,13 +82,6 @@ parts:
   ansible:
     plugin: python
     source: .
-    python-packages:
-    - setuptools_rust
-    - wheel
-    - setuptools
-    - botocore
-    - boto3
-    - ansible
     build-packages:
     - python3-venv
     - python3-dev
