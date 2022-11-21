@@ -90,7 +90,7 @@ parts:
     - python3-venv
     - python3-virtualenv
     override-build: |
-      python3-virtualenv ansible_env
+      virtualenv ansible_env
       export PATH=ansible_env/bin:$PATH
       CRYPTOGRAPHY_DONT_BUILD_RUST=1
       pip3 install --upgrade pip
