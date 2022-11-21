@@ -83,12 +83,15 @@ parts:
     plugin: python
     source: .
     build-packages:
+    - python3-virtualenv
     - python3-venv
     - python3-dev
     stage-packages:
     - python3
     - python3-venv
     - python3-virtualenv
+    python-packages:
+    - setuptools
     override-build: |
       virtualenv ansible_env
       export PATH=ansible_env/bin:$PATH
