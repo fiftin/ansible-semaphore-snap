@@ -169,7 +169,7 @@ CONFIG
 
 if [ -d $SNAP_USER_COMMON/ansible_env ]
 then
-	version=$($SNAP_USER_COMMON/ansible_env/semaphore_snap_revision)
+	version=$(cat "${SNAP_USER_COMMON}/ansible_env/semaphore_snap_revision")
 	if [ 219 -gt "$version" ]
 	then
 		rm -rf "${SNAP_USER_COMMON}/ansible_env"
