@@ -1,6 +1,6 @@
 name: semaphore
 
-base: core20
+base: core22
 
 version: 2.8.77
 

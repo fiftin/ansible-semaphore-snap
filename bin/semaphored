@@ -173,7 +173,7 @@ if [ ! -d $SNAP_USER_COMMON/ansible_env ] || [ ! "$(ls -A $SNAP_USER_COMMON/ansi
 then
 	tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
 
-	sed -i "s@^VIRTUAL_ENV=\".*@VIRTUAL_ENV=\"$SNAP_USER_COMMON/ansible_env\"@g" $SNAP_USER_COMMON/ansible_env/bin/activate
+	sed -i "s@^VIRTUAL_ENV=\'.*@VIRTUAL_ENV=\"$SNAP_USER_COMMON/ansible_env\'@g" $SNAP_USER_COMMON/ansible_env/bin/activate
 
  	find $SNAP_USER_COMMON/ansible_env/bin -type f -exec sed -i "s@/root/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" {} \;
 
