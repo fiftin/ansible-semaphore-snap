@@ -77,7 +77,7 @@ parts:
       chmod +x semaphore
       cp semaphore $SNAPCRAFT_PART_INSTALL/semaphore
     stage-packages:
-    - git
+    - git-all
     - openssh-client
     - sshpass
     - rsync
