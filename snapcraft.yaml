@@ -23,6 +23,8 @@ confinement: strict
 apps:
   semaphored:
     command: bin/snapcraft-preload $SNAP/semaphored
+    environment:
+      SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
     plugs:
     - network-bind
@@ -34,6 +36,7 @@ apps:
     command: bin/snapcraft-preload $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
+      SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     plugs:
     - network-bind
     - network
