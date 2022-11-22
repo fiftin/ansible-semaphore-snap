@@ -112,8 +112,6 @@ then
   snapctl set ldap-needtls="$ldap_needtls"
 fi
 
-mkdir -p ${SNAP_USER_COMMON}/repositories
-
 tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 {
  	"mysql": {
@@ -168,6 +166,18 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"demo_mode": 						${demo_mode}
 }
 CONFIG
+
+if [ -d $SNAP_USER_COMMON/ansible_env ]
+then
+	version=$($SNAP_USER_COMMON/ansible_env/semaphore_snap_revision)
+	if [ 219 -gt "$version" ]
+	then
+		rm -rf "${SNAP_USER_COMMON}/ansible_env"
+		rm -rf "${SNAP_USER_COMMON}/repositories"
+	fi
+fi
+
+mkdir -p ${SNAP_USER_COMMON}/repositories
 
 if [ ! -d $SNAP_USER_COMMON/ansible_env ] || [ ! "$(ls -A $SNAP_USER_COMMON/ansible_env)" ]
 then
