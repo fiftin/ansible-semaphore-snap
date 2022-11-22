@@ -171,20 +171,16 @@ CONFIG
 
 if [ ! -d $SNAP_USER_COMMON/ansible_env ] || [ ! "$(ls -A $SNAP_USER_COMMON/ansible_env)" ]
 then
-	tar xvzf $SNAP/ansible_env.tar.gz -C $SNAP_USER_COMMON
+	virtualenv $SNAP_USER_COMMON/ansible_env
+	source $SNAP_USER_COMMON/ansible_env/bin/activate
 
-	sed -i "s@^VIRTUAL_ENV=\'.*@VIRTUAL_ENV=\"$SNAP_USER_COMMON/ansible_env\'@g" $SNAP_USER_COMMON/ansible_env/bin/activate
-
- 	find $SNAP_USER_COMMON/ansible_env/bin -type f -exec sed -i "s@/root/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" {} \;
-
- 	find $SNAP_USER_COMMON/ansible_env/bin -type f -exec sed -i "s@/build/semaphore/parts/ansible/build/ansible_env/@$SNAP_USER_COMMON/ansible_env/@g" {} \;
-
+	CRYPTOGRAPHY_DONT_BUILD_RUST=1
+	pip3 install --upgrade pip
+	pip3 install setuptools_rust wheel setuptools botocore boto3
+	pip3 install ansible
+	
  	echo $SNAP_REVISION > $SNAP_USER_COMMON/ansible_env/semaphore_snap_revision
 fi
-
-python_path=$(which python3)
-
-ln -sf "${python_path}" "${SNAP_USER_COMMON}/ansible_env/bin/python3"
 
 export ANSIBLE_HOST_KEY_CHECKING=False
 export ANSIBLE_STDOUT_CALLBACK=yaml
