@@ -210,9 +210,6 @@ stdout_callback = yaml
 bin_ansible_callbacks = yes
 local_tmp = /tmp
 remote_tmp = /tmp
-[ssh_connection]
-scp_if_ssh = True
-transfer_method = scp
 CONFIG
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
