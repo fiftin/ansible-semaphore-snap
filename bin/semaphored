@@ -211,7 +211,7 @@ bin_ansible_callbacks = yes
 local_tmp = /tmp
 remote_tmp = /tmp
 [ssh_connection]
-transfer_method = scp
+scp_if_ssh = True
 CONFIG
 
 source $SNAP_USER_COMMON/ansible_env/bin/activate
