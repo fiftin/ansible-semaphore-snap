@@ -163,7 +163,8 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"slack_alert": 					${slack_alert},
  	"ldap_enable": 					${ldap_enable},
  	"ldap_needtls": 				${ldap_needtls},
- 	"demo_mode": 						${demo_mode}
+ 	"demo_mode": 						${demo_mode},
+	"git_client":           "go_git"
 }
 CONFIG
 
