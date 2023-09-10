@@ -44,7 +44,7 @@ ldap_needtls=$(snapctl get ldap-needtls)
 email_alert=$(snapctl get email-alert)
 telegram_alert=$(snapctl get telegram-alert)
 slack_alert=$(snapctl get slack-alert)
-demo_mode=$(snapctl get demo-mode)
+use_remote_runner=$(snapctl get use-remote-runner)
 
 if [ -z "$dialect" ]
 then
@@ -94,10 +94,10 @@ then
   snapctl set slack-alert="$slack_alert"
 fi
 
-if [ -z "$demo_mode" ]
+if [ -z "$use_remote_runner" ]
 then
-  demo_mode=false
-  snapctl set demo-mode="$demo_mode"
+  use_remote_runner=false
+  snapctl set use-remote-runner="$use_remote_runner"
 fi
 
 if [ -z "$ldap_enable" ]
@@ -163,7 +163,7 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"slack_alert": 					${slack_alert},
  	"ldap_enable": 					${ldap_enable},
  	"ldap_needtls": 				${ldap_needtls},
- 	"demo_mode": 						${demo_mode},
+ 	"use_remote_runner": 		${use_remote_runner},
 	"git_client":           "go_git"
 }
 CONFIG
