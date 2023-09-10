@@ -174,7 +174,7 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
  	"use_remote_runner": 		${use_remote_runner},
 	"git_client":           "go_git",
 	
-	"runner_registration_token": ${runner_registration_token}
+	"runner_registration_token": ${runner_registration_token}"
 }
 CONFIG
 
