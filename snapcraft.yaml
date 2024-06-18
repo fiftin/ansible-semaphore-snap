@@ -61,15 +61,10 @@ parts:
   semaphore:
     plugin: dump
     source:
-<<<<<<< HEAD
     - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.10.5-beta/semaphore_2.10.5-beta_linux_arm64.deb
     - else:
       - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.10.5-beta/semaphore_2.10.5-beta_linux_amd64.deb
-=======
-    - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.9.75/semaphore_2.9.75_linux_arm64.deb
-    - else:
-      - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.9.75/semaphore_2.9.75_linux_amd64.deb
->>>>>>> f4c0744e091213a8752a6ca65043835294d635d3
+
       - else fail
     source-type: deb
 
