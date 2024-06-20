@@ -92,7 +92,14 @@ parts:
     - sshpass
     - rsync
 
-  
+  terraform:
+    plugin: nil
+    source: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_${SNAP_ARCH}.zip
+    source-type: zip
+    organize:
+      terraform: bin/terraform
+    stage-packages:
+      - unzip
 
   ansible:
     plugin: python
