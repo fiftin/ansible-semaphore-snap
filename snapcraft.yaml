@@ -61,9 +61,19 @@ parts:
   semaphore:
     plugin: dump
     source:
-    - on arm64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.10.7/semaphore_2.10.7_linux_arm64.deb
+    - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.10.7/semaphore_2.10.7_linux_arm64.deb
     - else:
-      - on amd64: https://github.com/ansible-semaphore/semaphore/releases/download/v2.10.7/semaphore_2.10.7_linux_amd64.deb
+      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.10.7/semaphore_2.10.7_linux_amd64.deb
+
+      - else fail
+    source-type: deb
+
+  opentofu:
+    plugin: dump
+    source:
+    - on arm64: https://github.com/opentofu/opentofu/releases/download/v1.7.2/tofu_1.7.2_arm64.deb
+    - else:
+      - on amd64: https://github.com/opentofu/opentofu/releases/download/v1.7.2/tofu_1.7.2_amd64.deb
 
       - else fail
     source-type: deb
@@ -81,6 +91,8 @@ parts:
     - openssh-client
     - sshpass
     - rsync
+
+  
 
   ansible:
     plugin: python
