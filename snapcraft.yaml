@@ -101,6 +101,7 @@ parts:
     build-packages:
       - unzip
     override-build: |
+      unzip terraform_1.8.5_linux_${SNAP_ARCH}.zip
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin
       cp terraform $SNAPCRAFT_PART_INSTALL/bin/
 
