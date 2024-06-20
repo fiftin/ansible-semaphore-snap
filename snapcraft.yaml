@@ -98,10 +98,11 @@ parts:
       - on amd64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip
       - on arm64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_arm64.zip
     source-type: zip
-    organize:
-      terraform: bin/terraform
-    stage-packages:
+    build-packages:
       - unzip
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp terraform $SNAPCRAFT_PART_INSTALL/bin/
 
   ansible:
     plugin: python
