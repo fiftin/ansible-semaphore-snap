@@ -98,10 +98,7 @@ parts:
       - on amd64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip
       - on arm64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_arm64.zip
     source-type: zip
-    build-packages:
-      - unzip
     override-build: |
-      unzip terraform_1.8.5_linux_${SNAP_ARCH}.zip
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin
       cp terraform $SNAPCRAFT_PART_INSTALL/bin/
 
