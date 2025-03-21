@@ -18,7 +18,7 @@ description: |
 
 grade: stable
 
-confinement: strict
+confinement: classic
 
 apps:
   semaphored:
