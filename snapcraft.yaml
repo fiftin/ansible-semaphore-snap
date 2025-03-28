@@ -2,19 +2,19 @@ name: semaphore
 
 base: core20
 
-version: 2.13.0
+version: 2.13.1
 
 license: MIT
 
-summary: Modern UI for Ansible
+summary: Modern UI and powerful API for Ansible, Terraform and other DevOps tools
 
 architectures:
 - build-on: amd64
 - build-on: arm64
 
 description: |
-  Ansible Semaphore is beautiful web interface for running Ansible playbooks.
-  If your project has grown and deploying from the terminal is no longer for you then Ansible Semaphore is what you need.
+  Semaphore is beautiful web interface for running Ansible playbooks.
+  If your project has grown and deploying from the terminal is no longer for you then Semaphore is what you need.
 
 grade: stable
 
@@ -26,22 +26,22 @@ apps:
     environment:
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
-    plugs:
-    - network-bind
-    - network
-    - ssh-keys
-    - mount-observe
+    # plugs:
+    # - network-bind
+    # - network
+    # - ssh-keys
+    # - mount-observe
 
   semaphore:
     command: bin/snapcraft-preload $SNAP/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
-    plugs:
-    - network-bind
-    - network
-    - ssh-keys
-    - mount-observe
+    # plugs:
+    # - network-bind
+    # - network
+    # - ssh-keys
+    # - mount-observe
 
 
 parts:
