@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ $USER != "root" ]
-then
-  echo "Use sudo to execute semaphore commands."
-  exit 1
-fi
-
-semaphore "$@"

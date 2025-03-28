@@ -22,58 +22,25 @@ confinement: classic
 
 apps:
   semaphored:
-    command: bin/snapcraft-preload $SNAP/semaphored
+    command: $SNAP/semaphored
     environment:
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
-    # plugs:
-    # - network-bind
-    # - network
-    # - ssh-keys
-    # - mount-observe
 
   semaphore:
-    command: bin/snapcraft-preload $SNAP/semaphore
+    command: semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
-    # plugs:
-    # - network-bind
-    # - network
-    # - ssh-keys
-    # - mount-observe
 
 
 parts:
-  snapcraft-preload:
-    plugin: cmake
-    cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=
-    source: https://github.com/sergiusens/snapcraft-preload.git
-    build-packages:
-    - on amd64:
-      - gcc-multilib
-      - g++-multilib
-    stage-packages:
-    - on amd64:
-      - lib32stdc++6
-
   semaphore:
     plugin: dump
     source:
-    - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.0/semaphore_2.13.0_linux_arm64.deb
+    - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_arm64.deb
     - else:
-      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.0/semaphore_2.13.0_linux_amd64.deb
-
-      - else fail
-    source-type: deb
-
-  opentofu:
-    plugin: dump
-    source:
-    - on arm64: https://github.com/opentofu/opentofu/releases/download/v1.7.2/tofu_1.7.2_arm64.deb
-    - else:
-      - on amd64: https://github.com/opentofu/opentofu/releases/download/v1.7.2/tofu_1.7.2_amd64.deb
+      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_amd64.deb
 
       - else fail
     source-type: deb
@@ -85,42 +52,7 @@ parts:
     override-build: |
       chmod +x semaphored
       cp semaphored $SNAPCRAFT_PART_INSTALL/semaphored
-      chmod +x semaphore
-      cp semaphore $SNAPCRAFT_PART_INSTALL/semaphore
     stage-packages:
     - openssh-client
     - sshpass
     - rsync
-
-  terraform:
-    plugin: nil
-    source: 
-      - on amd64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip
-      - on arm64: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_arm64.zip
-    source-type: zip
-    override-build: |
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp terraform $SNAPCRAFT_PART_INSTALL/bin/
-
-  ansible:
-    plugin: python
-    source: .
-    build-packages:
-    - python3-virtualenv
-    - python3-venv
-    - python3-dev
-    stage-packages:
-    - python3
-    - python3-venv
-    - python3-virtualenv
-    python-packages:
-    - setuptools
-    override-build: |
-      virtualenv ansible_env
-      export PATH=ansible_env/bin:$PATH
-      CRYPTOGRAPHY_DONT_BUILD_RUST=1
-      pip3 install --upgrade pip
-      pip3 install setuptools_rust wheel setuptools botocore boto3
-      pip3 install ansible
-      tar cfz ansible_env.tar.gz ansible_env
-      cp ansible_env.tar.gz $SNAPCRAFT_PART_INSTALL
