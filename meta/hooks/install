@@ -1,3 +1,12 @@
+#!/bin/sh
+set -e
+
+# Create /etc/semaphore directory if it does not exist
+if [ ! -d /etc/semaphore ]; then
+  mkdir -p /etc/semaphore
+fi
+
+
 #!/bin/bash
 
 dialect=$(snapctl get dialect)
@@ -120,7 +129,15 @@ then
   snapctl set ldap-needtls="$ldap_needtls"
 fi
 
-tee "$SNAP_USER_COMMON/config.json" <<CONFIG
+mkdir -p ${SNAP_USER_COMMON}/repositories
+
+
+
+
+if [ ! -f /etc/semaphore/config.json ]; then
+
+
+    tee "/etc/semaphore/config.json" <<CONFIG
 {
  	"mysql": {
  		"host": "${mysql_host}",
@@ -178,7 +195,7 @@ tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 }
 CONFIG
 
-mkdir -p ${SNAP_USER_COMMON}/repositories
 
-semaphore server --config "$SNAP_USER_COMMON/config.json"
 
+  
+fi
