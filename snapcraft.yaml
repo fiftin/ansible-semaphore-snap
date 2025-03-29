@@ -22,14 +22,14 @@ confinement: classic
 
 apps:
   semaphored:
-    command: semaphore server
+    command: $SNAP/bin/semaphore server
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
 
   semaphore:
-    command: semaphore
+    command: $SNAP/bin/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
@@ -37,11 +37,11 @@ apps:
 
 parts:
   semaphore:
-    plugin: dump
-    source:
-    - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_arm64.deb
-    - else:
-      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_amd64.deb
-
-      - else fail
-    source-type: deb
+    plugin: nil
+    source: 
+      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_amd64.tar.gz
+      - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_arm64.tar.gz
+    source-type: tar
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp terraform $SNAPCRAFT_PART_INSTALL/bin/
