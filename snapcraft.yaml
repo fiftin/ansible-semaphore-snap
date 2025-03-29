@@ -22,14 +22,14 @@ confinement: classic
 
 apps:
   semaphored:
-    command: $SNAP/bin/semaphore server
+    command: bin/semaphore server
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
 
   semaphore:
-    command: $SNAP/bin/semaphore
+    command: bin/semaphore
     environment:
       SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
