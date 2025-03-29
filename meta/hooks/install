@@ -134,10 +134,10 @@ mkdir -p ${SNAP_USER_COMMON}/repositories
 
 
 
-if [ ! -f /etc/semaphore/config.json ]; then
+if [ ! -f $SNAP_USER_COMMON/config.json ]; then
 
 
-    tee "/etc/semaphore/config.json" <<CONFIG
+    tee "$SNAP_USER_COMMON/config.json" <<CONFIG
 {
  	"mysql": {
  		"host": "${mysql_host}",

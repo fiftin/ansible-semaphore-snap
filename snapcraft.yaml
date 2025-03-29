@@ -37,11 +37,10 @@ apps:
 
 parts:
   semaphore:
-    plugin: nil
-    source: 
+    plugin: dump
+    source:
       - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_amd64.tar.gz
       - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_arm64.tar.gz
     source-type: tar
-    override-build: |
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp semaphore $SNAPCRAFT_PART_INSTALL/bin/
+    organize:
+      semaphore: bin/semaphore
