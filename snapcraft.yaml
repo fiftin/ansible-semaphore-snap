@@ -44,4 +44,4 @@ parts:
     source-type: tar
     override-build: |
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp terraform $SNAPCRAFT_PART_INSTALL/bin/
+      cp semaphore $SNAPCRAFT_PART_INSTALL/bin/
