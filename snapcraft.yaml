@@ -26,7 +26,7 @@ system-usernames:
   snap_daemon: shared
 
 apps:
-  semaphored:
+  server:
     command: bin/semaphore server --no-config
     command-chain:
       - bin/setup-env
@@ -34,7 +34,20 @@ apps:
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
 
-  semaphore:
+  runner:
+    command: bin/semaphore runner start --auto-register --no-config
+    command-chain:
+      - bin/setup-env
+    environment:
+      SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
+    daemon: simple
+    # The runner is optional and needs runner.server-url and
+    # runner.registration-token to be configured first:
+    #   snap set semaphore runner.server-url=... runner.registration-token=...
+    #   snap start --enable semaphore.runner
+    install-mode: disable
+
+  cli:
     command: bin/semaphore --no-config
     command-chain:
       - bin/setup-env

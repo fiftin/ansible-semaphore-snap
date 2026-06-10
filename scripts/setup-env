@@ -7,9 +7,13 @@
 # actual command. Semaphore is started with `--no-config`, so its whole
 # configuration comes from these variables instead of a config.json file.
 #
+# Options are namespaced per app:
+#   server.*  — used by the `server` daemon and the `cli` app
+#   runner.*  — used by the `runner` daemon
+#
 # This script is referenced from `command-chain` in snapcraft.yaml and must
 # end by exec-ing "$@" so the real app command keeps running as the same
-# process (important for the systemd-managed daemon).
+# process (important for the systemd-managed daemons).
 set -eu
 
 # Export ENV_NAME=<value of snap option SNAP_KEY>, but only when the option is
@@ -43,84 +47,119 @@ export_secret() {
     export "$_env_name=$_value"
 }
 
-# --- Database -------------------------------------------------------------
-# Semaphore reads a single set of SEMAPHORE_DB_* variables and picks the
-# database backend based on SEMAPHORE_DB_DIALECT.
-dialect="$(snapctl get dialect 2>/dev/null || true)"
-[ -z "$dialect" ] && dialect="sqlite"
-export SEMAPHORE_DB_DIALECT="$dialect"
+# --- Detect which app is being launched ------------------------------------
+# command-chain receives the full command, e.g.:
+#   bin/semaphore server --no-config              -> server
+#   bin/semaphore runner start ... --no-config    -> runner
+#   bin/semaphore --no-config <user args>         -> cli (uses server config)
+mode=server
+for arg in "$@"; do
+    case "$arg" in
+        runner) mode=runner; break ;;
+        server) break ;;
+    esac
+done
 
-case "$dialect" in
-    mysql)
-        export_opt SEMAPHORE_DB_HOST mysql.host
-        export_opt SEMAPHORE_DB_USER mysql.user
-        export_opt SEMAPHORE_DB_PASS mysql.pass
-        export_opt SEMAPHORE_DB      mysql.name
-        ;;
-    postgres)
-        export_opt SEMAPHORE_DB_HOST postgres.host
-        export_opt SEMAPHORE_DB_USER postgres.user
-        export_opt SEMAPHORE_DB_PASS postgres.pass
-        export_opt SEMAPHORE_DB      postgres.name
-        ;;
-    bolt)
-        # Deprecated backend, kept for existing installations.
-        export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.boltdb"
-        ;;
-    *)
-        # sqlite (default). The "host" is the path to the database file.
-        export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.sqlite"
-        ;;
-esac
-
-# --- Server ---------------------------------------------------------------
-export_opt SEMAPHORE_PORT      port
-export_opt SEMAPHORE_INTERFACE interface
-export_opt SEMAPHORE_WEB_ROOT  web-host
+# --- Common ------------------------------------------------------------------
 export SEMAPHORE_TMP_PATH="${SNAP_COMMON}/repositories"
 export SEMAPHORE_GIT_CLIENT="go_git"
 mkdir -p "${SNAP_COMMON}/repositories"
 
-# --- Security -------------------------------------------------------------
-export_secret SEMAPHORE_COOKIE_HASH               cookie-hash
-export_secret SEMAPHORE_COOKIE_ENCRYPTION         cookie-encryption
-export_opt    SEMAPHORE_ACCESS_KEY_ENCRYPTION     access-key-encryption
-export_secret SEMAPHORE_RUNNER_REGISTRATION_TOKEN runner-registration-token
+if [ "$mode" = "runner" ]; then
+    # --- Runner --------------------------------------------------------------
+    # URL of the Semaphore server this runner connects to.
+    export_opt SEMAPHORE_WEB_ROOT runner.server-url
 
-# --- Tasks ----------------------------------------------------------------
-export_opt SEMAPHORE_MAX_PARALLEL_TASKS max-parallel-tasks
-export_opt SEMAPHORE_USE_REMOTE_RUNNER  use-remote-runner
+    # Registration: with --auto-register the runner registers itself using
+    # the registration token and persists the issued token in the token
+    # file (required when running with --no-config).
+    mkdir -p "${SNAP_COMMON}/runner"
+    export SEMAPHORE_RUNNER_TOKEN_FILE="${SNAP_COMMON}/runner/token"
+    export SEMAPHORE_RUNNER_PRIVATE_KEY_FILE="${SNAP_COMMON}/runner/private_key"
+    export_opt SEMAPHORE_RUNNER_REGISTRATION_TOKEN runner.registration-token
+    export_opt SEMAPHORE_RUNNER_TOKEN              runner.token
 
-# --- Email ----------------------------------------------------------------
-export_opt SEMAPHORE_EMAIL_ALERT    email-alert
-export_opt SEMAPHORE_EMAIL_SENDER   email-sender
-export_opt SEMAPHORE_EMAIL_HOST     email-host
-export_opt SEMAPHORE_EMAIL_PORT     email-port
-export_opt SEMAPHORE_EMAIL_USERNAME email-username
-export_opt SEMAPHORE_EMAIL_PASSWORD email-password
-export_opt SEMAPHORE_EMAIL_SECURE   email-secure
+    export_opt SEMAPHORE_RUNNER_NAME               runner.name
+    export_opt SEMAPHORE_RUNNER_WEBHOOK            runner.webhook
+    export_opt SEMAPHORE_RUNNER_MAX_PARALLEL_TASKS runner.max-parallel-tasks
+    export_opt SEMAPHORE_RUNNER_ONE_OFF            runner.one-off
+else
+    # --- Database ------------------------------------------------------------
+    # Semaphore reads a single set of SEMAPHORE_DB_* variables and picks the
+    # database backend based on SEMAPHORE_DB_DIALECT.
+    dialect="$(snapctl get server.dialect 2>/dev/null || true)"
+    [ -z "$dialect" ] && dialect="sqlite"
+    export SEMAPHORE_DB_DIALECT="$dialect"
 
-# --- LDAP -----------------------------------------------------------------
-export_opt SEMAPHORE_LDAP_ENABLE        ldap-enable
-export_opt SEMAPHORE_LDAP_BIND_DN       ldap-binddn
-export_opt SEMAPHORE_LDAP_BIND_PASSWORD ldap-bindpassword
-export_opt SEMAPHORE_LDAP_SERVER        ldap-server
-export_opt SEMAPHORE_LDAP_SEARCH_DN     ldap-searchdn
-export_opt SEMAPHORE_LDAP_SEARCH_FILTER ldap-searchfilter
-export_opt SEMAPHORE_LDAP_NEEDTLS       ldap-needtls
-export_opt SEMAPHORE_LDAP_MAPPING_DN    ldap-mappings.dn
-export_opt SEMAPHORE_LDAP_MAPPING_MAIL  ldap-mappings.mail
-export_opt SEMAPHORE_LDAP_MAPPING_UID   ldap-mappings.uid
-export_opt SEMAPHORE_LDAP_MAPPING_CN    ldap-mappings.cn
+    case "$dialect" in
+        mysql)
+            export_opt SEMAPHORE_DB_HOST server.mysql.host
+            export_opt SEMAPHORE_DB_USER server.mysql.user
+            export_opt SEMAPHORE_DB_PASS server.mysql.pass
+            export_opt SEMAPHORE_DB      server.mysql.name
+            ;;
+        postgres)
+            export_opt SEMAPHORE_DB_HOST server.postgres.host
+            export_opt SEMAPHORE_DB_USER server.postgres.user
+            export_opt SEMAPHORE_DB_PASS server.postgres.pass
+            export_opt SEMAPHORE_DB      server.postgres.name
+            ;;
+        bolt)
+            # Deprecated backend, kept for completeness.
+            export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.boltdb"
+            ;;
+        *)
+            # sqlite (default). The "host" is the path to the database file.
+            export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.sqlite"
+            ;;
+    esac
 
-# --- Alerts ---------------------------------------------------------------
-export_opt SEMAPHORE_TELEGRAM_ALERT telegram-alert
-export_opt SEMAPHORE_TELEGRAM_CHAT  telegram-chat
-export_opt SEMAPHORE_TELEGRAM_TOKEN telegram-token
-export_opt SEMAPHORE_SLACK_ALERT    slack-alert
+    # --- Server ----------------------------------------------------------------
+    export_opt SEMAPHORE_PORT      server.port
+    export_opt SEMAPHORE_INTERFACE server.interface
+    export_opt SEMAPHORE_WEB_ROOT  server.web-host
+
+    # --- Security ----------------------------------------------------------------
+    export_secret SEMAPHORE_COOKIE_HASH               server.cookie-hash
+    export_secret SEMAPHORE_COOKIE_ENCRYPTION         server.cookie-encryption
+    export_opt    SEMAPHORE_ACCESS_KEY_ENCRYPTION     server.access-key-encryption
+    export_secret SEMAPHORE_RUNNER_REGISTRATION_TOKEN server.runner-registration-token
+
+    # --- Tasks ----------------------------------------------------------------
+    export_opt SEMAPHORE_MAX_PARALLEL_TASKS server.max-parallel-tasks
+    export_opt SEMAPHORE_USE_REMOTE_RUNNER  server.use-remote-runner
+
+    # --- Email ----------------------------------------------------------------
+    export_opt SEMAPHORE_EMAIL_ALERT    server.email.alert
+    export_opt SEMAPHORE_EMAIL_SENDER   server.email.sender
+    export_opt SEMAPHORE_EMAIL_HOST     server.email.host
+    export_opt SEMAPHORE_EMAIL_PORT     server.email.port
+    export_opt SEMAPHORE_EMAIL_USERNAME server.email.username
+    export_opt SEMAPHORE_EMAIL_PASSWORD server.email.password
+    export_opt SEMAPHORE_EMAIL_SECURE   server.email.secure
+
+    # --- LDAP -----------------------------------------------------------------
+    export_opt SEMAPHORE_LDAP_ENABLE        server.ldap.enable
+    export_opt SEMAPHORE_LDAP_BIND_DN       server.ldap.binddn
+    export_opt SEMAPHORE_LDAP_BIND_PASSWORD server.ldap.bindpassword
+    export_opt SEMAPHORE_LDAP_SERVER        server.ldap.server
+    export_opt SEMAPHORE_LDAP_SEARCH_DN     server.ldap.searchdn
+    export_opt SEMAPHORE_LDAP_SEARCH_FILTER server.ldap.searchfilter
+    export_opt SEMAPHORE_LDAP_NEEDTLS       server.ldap.needtls
+    export_opt SEMAPHORE_LDAP_MAPPING_DN    server.ldap.mappings.dn
+    export_opt SEMAPHORE_LDAP_MAPPING_MAIL  server.ldap.mappings.mail
+    export_opt SEMAPHORE_LDAP_MAPPING_UID   server.ldap.mappings.uid
+    export_opt SEMAPHORE_LDAP_MAPPING_CN    server.ldap.mappings.cn
+
+    # --- Alerts ---------------------------------------------------------------
+    export_opt SEMAPHORE_TELEGRAM_ALERT server.telegram.alert
+    export_opt SEMAPHORE_TELEGRAM_CHAT  server.telegram.chat
+    export_opt SEMAPHORE_TELEGRAM_TOKEN server.telegram.token
+    export_opt SEMAPHORE_SLACK_ALERT    server.slack.alert
+fi
 
 # --- Drop privileges --------------------------------------------------------
-# The service must not run as root. Snapd creates the snap_daemon user
+# The services must not run as root. Snapd creates the snap_daemon user
 # (declared in snapcraft.yaml via system-usernames); everything above that
 # needs root (snapctl set) is already done, so switch to snap_daemon before
 # exec-ing Semaphore. Non-root invocations (CLI without sudo) skip this.

@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 
-if snapctl services semaphore | grep -q "active"; then
-  snapctl restart semaphore
-fi
+# Restart running services so they pick up the new snap options
+# (setup-env re-reads them on every start).
+for service in semaphore.server semaphore.runner; do
+  if snapctl services "$service" 2>/dev/null | grep -qw "active"; then
+    snapctl restart "$service"
+  fi
+done
