@@ -47,7 +47,7 @@ apps:
     #   snap start --enable semaphore.runner
     install-mode: disable
 
-  cli:
+  semaphore:
     command: bin/semaphore --no-config
     command-chain:
       - bin/setup-env
