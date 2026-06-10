@@ -1,3 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -eu
 
-touch "$SNAP_USER_COMMON/config_changed"
+if snapctl services semaphore | grep -q "active"; then
+  snapctl restart semaphore
+fi

@@ -22,16 +22,18 @@ confinement: classic
 
 apps:
   semaphored:
-    command: bin/semaphore server
+    command: bin/semaphore server --no-config
+    command-chain:
+      - bin/setup-env
     environment:
-      SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
     daemon: simple
 
   semaphore:
-    command: bin/semaphore
+    command: bin/semaphore --no-config
+    command-chain:
+      - bin/setup-env
     environment:
-      SEMAPHORE_CONFIG_PATH: $SNAP_USER_COMMON/config.json
       SNAPCRAFT_PRELOAD_REDIRECT_ONLY_SHM: 1
 
 
@@ -44,3 +46,9 @@ parts:
     source-type: tar
     organize:
       semaphore: bin/semaphore
+
+  scripts:
+    plugin: dump
+    source: scripts
+    organize:
+      setup-env: bin/setup-env
