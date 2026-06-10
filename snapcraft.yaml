@@ -20,6 +20,11 @@ grade: stable
 
 confinement: classic
 
+# The daemon starts as root (required for snapctl set) and setup-env drops
+# privileges to this user via setpriv before exec-ing Semaphore.
+system-usernames:
+  snap_daemon: shared
+
 apps:
   semaphored:
     command: bin/semaphore server --no-config
@@ -52,3 +57,6 @@ parts:
     source: scripts
     organize:
       setup-env: bin/setup-env
+    # setpriv is used by setup-env to drop root privileges to snap_daemon.
+    stage-packages:
+      - util-linux

@@ -119,4 +119,27 @@ export_opt SEMAPHORE_TELEGRAM_CHAT  telegram-chat
 export_opt SEMAPHORE_TELEGRAM_TOKEN telegram-token
 export_opt SEMAPHORE_SLACK_ALERT    slack-alert
 
+# --- Drop privileges --------------------------------------------------------
+# The service must not run as root. Snapd creates the snap_daemon user
+# (declared in snapcraft.yaml via system-usernames); everything above that
+# needs root (snapctl set) is already done, so switch to snap_daemon before
+# exec-ing Semaphore. Non-root invocations (CLI without sudo) skip this.
+DAEMON_USER="snap_daemon"
+
+if [ "$(id -u)" = "0" ] && id "$DAEMON_USER" >/dev/null 2>&1; then
+    # Semaphore and the tools it spawns (git, ansible) need a writable HOME.
+    export HOME="${SNAP_COMMON}/home"
+    mkdir -p "$HOME"
+
+    # Hand over data created by earlier root-running versions (one-time:
+    # files created after the switch are already owned by snap_daemon).
+    if [ "$(stat -c %U "$SNAP_COMMON" 2>/dev/null)" != "$DAEMON_USER" ]; then
+        chown -R "$DAEMON_USER:$DAEMON_USER" "$SNAP_COMMON"
+    fi
+
+    setpriv="${SNAP}/usr/bin/setpriv"
+    [ -x "$setpriv" ] || setpriv="setpriv"
+    exec "$setpriv" --clear-groups --reuid "$DAEMON_USER" --regid "$DAEMON_USER" -- "$@"
+fi
+
 exec "$@"
