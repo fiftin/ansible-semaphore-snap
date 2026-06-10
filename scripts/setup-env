@@ -65,11 +65,11 @@ case "$dialect" in
         ;;
     bolt)
         # Deprecated backend, kept for existing installations.
-        export SEMAPHORE_DB_HOST="${SNAP_USER_COMMON}/database.boltdb"
+        export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.boltdb"
         ;;
     *)
         # sqlite (default). The "host" is the path to the database file.
-        export SEMAPHORE_DB_HOST="${SNAP_USER_COMMON}/database.sqlite"
+        export SEMAPHORE_DB_HOST="${SNAP_COMMON}/database.sqlite"
         ;;
 esac
 
@@ -77,9 +77,9 @@ esac
 export_opt SEMAPHORE_PORT      port
 export_opt SEMAPHORE_INTERFACE interface
 export_opt SEMAPHORE_WEB_ROOT  web-host
-export SEMAPHORE_TMP_PATH="${SNAP_USER_COMMON}/repositories"
+export SEMAPHORE_TMP_PATH="${SNAP_COMMON}/repositories"
 export SEMAPHORE_GIT_CLIENT="go_git"
-mkdir -p "${SNAP_USER_COMMON}/repositories"
+mkdir -p "${SNAP_COMMON}/repositories"
 
 # --- Security -------------------------------------------------------------
 export_secret SEMAPHORE_COOKIE_HASH               cookie-hash
