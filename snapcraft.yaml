@@ -2,7 +2,7 @@ name: semaphore
 
 base: core20
 
-version: 2.13.1
+version: 2.18.12
 
 license: MIT
 
@@ -39,8 +39,8 @@ parts:
   semaphore:
     plugin: dump
     source:
-      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_amd64.tar.gz
-      - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.13.1/semaphore_2.13.1_linux_arm64.tar.gz
+      - on amd64: https://github.com/semaphoreui/semaphore/releases/download/v2.18.12/semaphore_2.18.12_linux_amd64.tar.gz
+      - on arm64: https://github.com/semaphoreui/semaphore/releases/download/v2.18.12/semaphore_2.18.12_linux_arm64.tar.gz
     source-type: tar
     organize:
       semaphore: bin/semaphore

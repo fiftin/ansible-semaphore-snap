@@ -59,7 +59,7 @@ use_remote_runner=$(snapctl get use-remote-runner)
 
 if [ -z "$dialect" ]
 then
-  dialect=bolt
+  dialect=sqlite
   snapctl set dialect="$dialect"
 fi
 
@@ -132,8 +132,6 @@ fi
 mkdir -p ${SNAP_USER_COMMON}/repositories
 
 
-
-
 if [ ! -f $SNAP_USER_COMMON/config.json ]; then
 
 
@@ -151,8 +149,8 @@ if [ ! -f $SNAP_USER_COMMON/config.json ]; then
  		"pass": "${postgres_pass}",
  		"name": "${postgres_name}"
  	},
- 	"bolt": {
- 		"host": "${SNAP_USER_COMMON}/database.boltdb"
+ 	"sqlite": {
+ 		"host": "${SNAP_USER_COMMON}/database.sqlite"
  	},
 	"dialect":				"${dialect}",
  	"port": 				"${port}",
@@ -194,8 +192,6 @@ if [ ! -f $SNAP_USER_COMMON/config.json ]; then
 	"runner_registration_token": "${runner_registration_token}"
 }
 CONFIG
-
-
 
   
 fi
